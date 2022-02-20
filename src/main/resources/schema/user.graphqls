@@ -2,6 +2,14 @@ type Mutation {
     registerUser(user: User!): String
 }
 
+type Query {
+    loginUser(user: User!): AccessToken
+}
+
+type AccessToken {
+    sessionToken: String
+}
+
 input User {
     email: String
     password: String

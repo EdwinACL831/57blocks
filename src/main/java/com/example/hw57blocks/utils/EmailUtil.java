@@ -2,7 +2,7 @@ package com.example.hw57blocks.utils;
 
 import java.util.regex.Pattern;
 
-public class Util {
+public class EmailUtil {
     private static final String EMAIL_REGEX = "^([\\d\\w\\S\\.-_]+)@([\\d\\w\\S\\.-_]+)\\.(\\w){2,5}$";
     private static final String PASSWORD_REGEX = "([[a-z][A-Z](!|#|\\?|@|\\])]+){10,}";
 

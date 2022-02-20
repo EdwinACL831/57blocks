@@ -1,19 +1,21 @@
 package com.example.hw57blocks.services;
 
 import com.example.hw57blocks.entities.UserEntity;
+import com.example.hw57blocks.models.AccessToken;
 import com.example.hw57blocks.models.User;
 import com.example.hw57blocks.repositories.UserRepository;
+import com.example.hw57blocks.utils.JWTUtil;
 import com.netflix.graphql.dgs.exceptions.DgsInvalidInputArgumentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
     private static final String DUMMY_EMAIL = "dummy.email@company.com";
@@ -69,5 +71,29 @@ public class UserServiceTest {
         when(user.getPassword()).thenReturn("MyPa$sword123");
 
         assertThrows(DgsInvalidInputArgumentException.class, () -> userService.registerUser(user));
+    }
+
+    @Test
+    @DisplayName("loginUser method -> returns a valid JWT token")
+    public void loginUser() {
+        when(userRepository.findByEmail(DUMMY_EMAIL)).thenReturn(Optional.of(userEntity));
+        when(userEntity.getPassword()).thenReturn(DUMMY_PASSWORD);
+
+        try(MockedStatic<JWTUtil> jwtUtil = mockStatic(JWTUtil.class)) {
+            jwtUtil.when(() -> JWTUtil.generateToken(anyMap(), anyLong())).thenReturn("validToken");
+
+            AccessToken accessToken = userService.loginUser(user);
+
+            assertEquals("validToken",accessToken.getSessionToken());
+        }
+    }
+
+    @Test
+    @DisplayName("loginUser method -> throws exception when password does not match")
+    public void loginUser_incorrectEmail() {
+        when(userRepository.findByEmail(DUMMY_EMAIL)).thenReturn(Optional.of(userEntity));
+        when(userEntity.getPassword()).thenReturn("different_password");
+
+        assertThrows(DgsInvalidInputArgumentException.class, () -> userService.loginUser(user));
     }
 }
