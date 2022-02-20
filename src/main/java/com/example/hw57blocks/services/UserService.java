@@ -23,22 +23,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Boolean isEmailFormatValid(String email) {
-        return Util.isValidEmail(email);
-    }
-
-    public boolean isPasswordFormatValid(String password) {
-        return Util.isValidPassword(password);
-    }
-
-    public boolean emailExist(String email) {
+    private boolean emailExist(String email) {
         Optional<UserEntity> result = userRepository.findByEmail(email);
         return result.isPresent();
     }
 
     public String registerUser(User user) throws DgsInvalidInputArgumentException {
         String email = user.getEmail().trim();
-        if (!isEmailFormatValid(email)) {
+        String password = user.getPassword().trim();
+
+        if (!Util.isValidEmail(email)) {
             throw new DgsInvalidInputArgumentException(INVALID_EMAIL_FORMAT_MSG, null);
         }
 
@@ -46,9 +40,14 @@ public class UserService {
             throw new DgsInvalidInputArgumentException(EMAIL_EXISTS_MSG, null);
         }
 
-        if (!isPasswordFormatValid(user.getPassword().trim())) {
+        if (!Util.isValidPassword(password)) {
             throw new DgsInvalidInputArgumentException(INVALID_PASSWORD_FORMAT_MSG, null);
         }
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(email);
+        userEntity.setPassword(password);
+        userRepository.save(userEntity);
 
         return REGISTRATION_DONE_MSG;
     }
