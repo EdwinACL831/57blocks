@@ -18,18 +18,6 @@ public class UserController {
 
     @DgsMutation
     public String registerUser(@InputArgument("user") User user) throws DgsInvalidInputArgumentException {
-        if (!userService.validateEmailFormat(user.getEmail().trim())) {
-            throw new DgsInvalidInputArgumentException("Email format is not valid, please verify it", null);
-        }
-
-        if (userService.emailExist(user.getEmail().trim())) {
-            throw new DgsInvalidInputArgumentException("Email already exist, please use a different email", null);
-        }
-
-        if (!userService.validatePasswordFormat(user.getPassword().trim())) {
-            throw new DgsInvalidInputArgumentException("Password format is not valid, please verify it", null);
-        }
-
-        return user.getPassword();
+        return this.userService.registerUser(user);
     }
 }
