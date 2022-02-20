@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @DgsQuery
-    public AccessToken loginUser(@InputArgument("user") User user) {
+    public AccessToken loginUser(@InputArgument("user") User user) throws DgsInvalidInputArgumentException {
         return this.userService.loginUser(user);
     }
 }

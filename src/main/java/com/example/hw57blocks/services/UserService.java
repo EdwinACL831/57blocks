@@ -69,9 +69,7 @@ public class UserService {
     public String registerUser(User user) throws DgsInvalidInputArgumentException {
         validateEmailAndPassword(user,false );
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(user.getPassword());
+        UserEntity userEntity = new UserEntity(user.getEmail(), user.getPassword());
         userRepository.save(userEntity);
 
         return REGISTRATION_DONE_MSG;
