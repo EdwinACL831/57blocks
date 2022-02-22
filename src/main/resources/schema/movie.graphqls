@@ -1,5 +1,6 @@
 extend type Mutation {
     addMovie(movie: MovieInput!): String
+    updateMovie(movie: MovieInput!): String
 }
 
 extend type Query {

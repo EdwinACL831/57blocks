@@ -88,7 +88,8 @@ public class MovieControllerTest {
 
         String response = movieController.addMovie(MOCK_BEARER_TOKEN, movie);
 
-        assertEquals("Movie added successfully!", response);
+        verify(movieService).insertNewMovie(movie);
+        assertEquals(MovieController.MOVIE_ADDED_SUCCESSFULLY, response);
         assertEquals("dummy-email@something.com", movie.getAddedBy());
     }
 }

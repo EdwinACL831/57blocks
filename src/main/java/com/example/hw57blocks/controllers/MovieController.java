@@ -11,6 +11,7 @@ import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
 import com.netflix.graphql.dgs.exceptions.DgsBadRequestException;
+import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,7 +20,9 @@ import java.util.List;
 
 @DgsComponent
 public class MovieController {
-    private static final String AUTH_HEADER = "authorization";
+    public static final String MOVIE_ADDED_SUCCESSFULLY = "Movie added successfully!";
+    public static final String MOVIE_UPDATED_SUCCESSFULLY = "Movie updated successfully!";
+    private final String AUTH_HEADER = "authorization";
     private final MovieService movieService;
 
     public MovieController(@Autowired MovieService movieService) {
@@ -42,9 +45,9 @@ public class MovieController {
             @RequestHeader(name = AUTH_HEADER) String bearerToken,
             @InputArgument(name = "pagination") Pagination pagination
     ) {
-        // TODO: add the filter to only retrieve the user's private movies, not all the private movies
         JWTUtil.validateBearerToken(bearerToken);
-        List<Movie> userPrivateMovies = this.movieService.getUserPrivateMovies();
+        String addedBy = JWTUtil.getTokenClaims(bearerToken).get(JWTUtil.JWT_EMAIL_KEY, String.class);
+        List<Movie> userPrivateMovies = this.movieService.getUserPrivateMovies(addedBy);
 
         return getPaginatedMovie(pagination, userPrivateMovies);
     }
@@ -59,7 +62,19 @@ public class MovieController {
         movie.setAddedBy(claims.get(JWTUtil.JWT_EMAIL_KEY, String.class));
         this.movieService.insertNewMovie(movie);
 
-        return "Movie added successfully!";
+        return MOVIE_ADDED_SUCCESSFULLY;
+    }
+
+    @DgsMutation
+    public String updateMovie(
+            @RequestHeader(name = AUTH_HEADER) String bearerToken,
+            @InputArgument(name = "movie") Movie movie
+    ) throws DgsEntityNotFoundException {
+        JWTUtil.validateBearerToken(bearerToken);
+        String addedBy = JWTUtil.getTokenClaims(bearerToken).get(JWTUtil.JWT_EMAIL_KEY, String.class);
+        this.movieService.updatePrivateUserMovie(movie, addedBy);
+
+        return MOVIE_UPDATED_SUCCESSFULLY;
     }
 
     private PaginatedMovie getPaginatedMovie(Pagination pagination, List<Movie> movies) {
