@@ -1,0 +1,51 @@
+extend type Mutation {
+    addMovie(movie: MovieInput!): String
+}
+
+extend type Query {
+    getPublicMovies(pagination: Pagination): PaginatedMovie
+    getMyPrivateMovies(pagination: Pagination): PaginatedMovie
+}
+
+input Pagination {
+    size: Int
+    page: Int
+}
+
+type PaginatedMovie {
+    page: Int
+    totalElements: Int
+    movies: [Movie]
+}
+
+input MovieInput {
+    name: String
+    releaseYear: Int
+    budget: Int
+    category: Category
+    director: String
+    visibility: Visibility
+}
+
+type Movie {
+    name: String
+    releaseYear: Int
+    budget: Int
+    category: Category
+    director: String
+    visibility: Visibility
+    addedBy: String
+}
+
+enum Visibility {
+    PRIVATE
+    PUBLIC
+}
+
+enum Category {
+    THRILLER
+    COMEDY
+    ROMANTIC
+    SCIENCE_FICTION
+    DOCUMENTARY
+}

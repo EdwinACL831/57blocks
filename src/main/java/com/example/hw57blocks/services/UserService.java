@@ -80,6 +80,6 @@ public class UserService {
 
         long lifeTimeMillis = (1000L * 60L * 20L);
 
-        return new AccessToken(JWTUtil.generateToken(Map.of("email", user.getEmail().trim()), lifeTimeMillis));
+        return new AccessToken(JWTUtil.generateToken(Map.of(JWTUtil.JWT_EMAIL_KEY, user.getEmail().trim()), lifeTimeMillis));
     }
 }

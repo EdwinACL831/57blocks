@@ -1,8 +1,8 @@
-type Mutation {
+extend type Mutation {
     registerUser(user: User!): String
 }
 
-type Query {
+extend type Query {
     loginUser(user: User!): AccessToken
 }
 
