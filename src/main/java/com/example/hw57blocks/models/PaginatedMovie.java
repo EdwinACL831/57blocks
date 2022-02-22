@@ -12,4 +12,16 @@ public class PaginatedMovie {
         this.totalElements = totalElements;
         this.movies = movies;
     }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public Integer getTotalElements() {
+        return totalElements;
+    }
 }

@@ -41,4 +41,24 @@ public class MovieServiceTest {
 
         assertTrue(movies.isEmpty());
     }
+
+    @Test
+    @DisplayName("getUserPrivateMovies -> returns empty list when not found any public movie in DB")
+    public void getUserPrivateMovies() {
+        when(movieRepository.findMoviesByVisibility(Visibility.PRIVATE)).thenReturn(Optional.empty());
+
+        List<Movie> movies = movieService.getUserPrivateMovies();
+
+        assertTrue(movies.isEmpty());
+    }
+
+    @Test
+    @DisplayName("getUserPrivateMovies -> returns empty list when the repository returns null")
+    public void getUserPrivateMovies_null() {
+        when(movieRepository.findMoviesByVisibility(Visibility.PRIVATE)).thenReturn(null);
+
+        List<Movie> movies = movieService.getUserPrivateMovies();
+
+        assertTrue(movies.isEmpty());
+    }
 }

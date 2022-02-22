@@ -4,6 +4,9 @@ public class Pagination {
     private Integer size;
     private Integer page;
 
+    /**
+     * Necessary for DGS so the schema parse can be done
+     */
     public Pagination(){}
 
     public void setSize(Integer size) {

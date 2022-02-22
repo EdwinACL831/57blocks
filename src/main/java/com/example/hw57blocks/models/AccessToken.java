@@ -1,7 +1,7 @@
 package com.example.hw57blocks.models;
 
 public class AccessToken {
-    private String sessionToken;
+    private final String sessionToken;
 
     public AccessToken(String token) {
         this.sessionToken = token;

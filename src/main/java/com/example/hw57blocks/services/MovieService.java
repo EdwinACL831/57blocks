@@ -18,10 +18,6 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    public List<MovieEntity> findMoviesByUser() throws Exception {
-        throw new Exception("METHOD NOT IMPLEMENTED");
-    }
-
     public List<Movie> getAllPublicMovies() {
         Optional<List<MovieEntity>> result = this.movieRepository.findMoviesByVisibility(Visibility.PUBLIC);
         return getMovieList(result);
@@ -42,7 +38,6 @@ public class MovieService {
                 movie.getVisibility(),
                 movie.getAddedBy());
 
-        System.out.println("movieEntity.getName(): " + movieEntity.getName());
         this.movieRepository.save(movieEntity);
     }
 

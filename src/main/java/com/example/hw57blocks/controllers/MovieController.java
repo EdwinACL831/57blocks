@@ -42,6 +42,7 @@ public class MovieController {
             @RequestHeader(name = AUTH_HEADER) String bearerToken,
             @InputArgument(name = "pagination") Pagination pagination
     ) {
+        // TODO: add the filter to only retrieve the user's private movies, not all the private movies
         JWTUtil.validateBearerToken(bearerToken);
         List<Movie> userPrivateMovies = this.movieService.getUserPrivateMovies();
 
@@ -53,7 +54,6 @@ public class MovieController {
             @RequestHeader(name = AUTH_HEADER) String bearerToken,
             @InputArgument(name = "movie") Movie movie
     ) {
-        System.out.println("name: " + movie.getName());
         JWTUtil.validateBearerToken(bearerToken);
         Claims claims = JWTUtil.getTokenClaims(bearerToken);
         movie.setAddedBy(claims.get(JWTUtil.JWT_EMAIL_KEY, String.class));

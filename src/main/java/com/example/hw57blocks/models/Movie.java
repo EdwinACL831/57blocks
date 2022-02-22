@@ -12,6 +12,9 @@ public class Movie {
     private Visibility visibility;
     private String addedBy;
 
+    /**
+     * Necessary for DGS so the schema parse can be done
+     */
     public Movie(){}
 
     public Movie(String name,
