@@ -22,8 +22,10 @@ were needed; however the core of the API are:
 
 ### 1.1 How to run the project locally
 
-You must have at least `Java SDK 11` installed in your computer, along with `gradle` since this is the tasks and dependencies' manager
-used on this project. Once you meet these specifications, you are ready to start up the server locally. For this, there are two ways
+You must have at least `Java SDK 11` installed in your computer, along with `gradle 6.8.3` at least since this is the tasks and dependencies' manager
+used on this project. we recommend `sdkman` which is the `home brew` for linux.
+
+Once you meet these specifications, you are ready to start up the server locally. For this, there are two ways
 to do it:
 1. Using an IDE
 2. Through a CLI/Linux Terminal
@@ -43,11 +45,11 @@ and from there you can start or stop the application/service.
 #### Option 2: From CLI/Linux terminal
 
 Open a new Linux terminal window, and go to the main folder of the project. In this case would me something like: 
-```
+```shell
 cd ~/<path_to_where_you_downloaded_the_repo>/hw57blocks
 ```
 Once there, you run
-```
+```shell
 gradle bootRun
 ```
 It will start to run up the service.
@@ -73,7 +75,7 @@ PUT, POST, PATCH
 
 For both of these operations, you can pass input parameters that the server can process if they are configured to do so. These are examples of queries and mutations' syntax:
 
-```
+```graphql
 mutation M2 {
   updateMovie(movie: {
     name: "Scream2", 
@@ -86,7 +88,7 @@ mutation M2 {
 }
 ```
 And
-```
+```graphql
 query Q1 {
   getPublicMovies(pagination: {size: 1, page: 1}) {
     page
@@ -115,7 +117,7 @@ For this project there are 6 different operations: 3 Queries and 3 Mutations:
 
 These schemas defines the different types that a Query/Mutation can return or accept as a parameter. Here are some examples of each one:
 
-```
+```graphql
 extend type Mutation {
     addMovie(movie: MovieInput!): String
     updateMovie(movie: MovieInput!): String
@@ -138,6 +140,39 @@ Let's describe one for each operation type:
     
 You can and might check all the different schemas, under the `src/main/resource/schema/` folder
 
+ ### 2.3 How to execute a Query/Mutation
+
+Here we have 2 options on hwo to execute a query or mutation:
+* Using a third party tool (like Postman)
+* Using the embedded tool from DGS
+
+ #### Option 1: Postman (Desktop App)
+
+First, you must have the graphQL server up and running.Then start the Postman app. Once it's running, create a new tab to execute a new request to the
+local server. As was mentioned before, by default the endpoint will be `/graphql` so redirect all the queries/mutations to that URI.
+```
+Method: POST 
+URL: localhost:8080/graphql
+```
+Now in the Body tab, write the query/mutation nd the hit on send. That would be all! If you need to send any header (for example the Authorization header)
+just add it on the Headers type. In this project in order to know which user is authenticated, the API needs a JWT (JSON Web Toke) to validate and execute the operation.
+You must use the ``Authentication`` header with the value `"Bearer <JWT>"`.
+```
+Please notice and do not ommit the space between the word Bearer and the JWT
+```
+
+#### Option 2: DGS Embedded Tool
+DGS has an embedded GUI tool to execute graphQL queries/mutations. To use it just open a web browser and go to `localhost:8080/graphiql` and you will be redirected to the
+embedded tool. From there you can write the queries on the upper left side panel. 
+
+The lower left side panel, is used to pass variables on the queries/mutations and for adding headers to them as well 
+(there you pass the Authentication header). For both of them, the syntax is JSON.
+```json
+{
+  "authorization": "Bearer <JWT>"
+}
+```
+Then just hit the play button from the upper right corner. That would be all the setup needed to execute a query/mutation.
 ## 3. Data Base
 
 For this project, and since the scope it's just a technical task focused on creating and leveraging a GraphQl API up, the DB selected to be used
@@ -151,7 +186,7 @@ Finally, we can upload preexisted data loaded up in the service start up.
 ## 4. Unit Test
 
 This project also has unit tests for the core of the application (again due to the scope and intention of this project). You can run them buy executing
-```
+```shell
 gradle test
 ```
 In the root project's folder.
