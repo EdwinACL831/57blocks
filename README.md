@@ -1,6 +1,6 @@
 # 57blocks
 
-This homework consist about creating an API (REST or GraphQL) That does:
+This project consist about creating an API (REST or GraphQL) That does:
 
 * Create New Users and store them in the DB
 * Authenticate the existing Users
